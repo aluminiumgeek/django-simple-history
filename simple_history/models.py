@@ -473,6 +473,8 @@ class HistoricalRecords(object):
         for field in self.fields_included(instance):
             attrs[field.attname] = getattr(instance, field.attname)
         for field in self.m2m_fields:
+            if field.name not in attrs:
+                continue
             attrs[field.name].set(getattr(instance, field.name).all().values_list('id', flat=True))
 
         history_instance = manager.model(
